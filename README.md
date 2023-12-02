@@ -1,36 +1,53 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+![screenshot](public/screenshot.png)
 
-First, run the development server:
+## Introduction
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This is a next js 14 with multi-language(i18n) setup following the guide in NEXT's official doc. (https://nextjs.org/docs/app/building-your-application/routing/internationalization).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## features
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- light weight minimum setup.
+- only installed two packages: negotiator & @formatjs/intl-localematcher.
+- using the method recommended in Next official documentation on internationalization.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## structure
 
-## Learn More
+@ represents root
 
-To learn more about Next.js, take a look at the following resources:
+#### @/lib/lang.js
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- configuration app's available languages and default language.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+#### @/middleware.js
 
-## Deploy on Vercel
+- detect client browser languages through request header.
+- determine suitable language based using negotiator and @formatjs/intl-localematcher.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### @/lib/dictionaries/[langCode].json
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- created json dictionary files in accordance with lang.js configeration.
+- each json file is named in language code.
+
+#### @/lib/dictionary.js
+
+- provides function to dynamic import the dictionary based on current locale.
+
+#### restructured app folder
+
+- moved root page.js and layout.js into [lang]
+- the home page now located at app/[lang]/page.js
+- new route: app/[lang]/newroute/page.js
+- it doesn't affect api folder: app/api/...
+- it also doesn't affect favicon.ico, globals.css
+- if you want to change the structure, it can be configured in middleware.
+
+#### created @/components/global/LangToggle.jsx
+
+- a component detects and current language
+- switch the language of the app
+
+#### modified home page
+
+- example usage of dictionaries and languge toggle component in app
